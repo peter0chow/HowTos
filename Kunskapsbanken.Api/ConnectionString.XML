@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<Configuration>
-  <ConnectionString>
-	Data Source=localhost\SQLEXPRESS;Initial Catalog=Kunskapsbanken;Persist Security Info=True;User ID=caperio\pech01;Password=Oyeuai2ol6;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
-  </ConnectionString>
-</Configuration>
