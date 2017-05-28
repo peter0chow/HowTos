@@ -50,7 +50,6 @@ namespace Kunskapsbanken.Api.Controllers
                 {
                     return BadRequest("KB som du har valt, finns inte!");
                 }
-
             }
 
             catch (Exception e)
@@ -149,7 +148,6 @@ namespace Kunskapsbanken.Api.Controllers
                 {
                     return BadRequest("KB som du har valt, finns inte!");
                 }
-
             }
 
             catch (Exception e)
@@ -164,7 +162,7 @@ namespace Kunskapsbanken.Api.Controllers
 
 
 
-        // Visa alla tillgängliga KB som matchar sökord
+        // Visa alla tillgängliga KB som matchar sökord. Den försöker matcha ett ord i Description.
         [HttpGet]
         [Route("Search/{search}")]
         public IHttpActionResult SearchAllHowTos(string search)
@@ -182,8 +180,6 @@ namespace Kunskapsbanken.Api.Controllers
                 {
                     return Ok(myHowTos);
                 }
-
-
             }
 
             catch (Exception e)
@@ -194,18 +190,9 @@ namespace Kunskapsbanken.Api.Controllers
 
 
 
-        // Visa alla tillgängliga KB som matchar tomt sökord
-        [HttpGet]
-        [Route("Search")]
-        public IHttpActionResult SearchAllHowTos_()
-        {
-            return GetAllHowTos();
-        }
 
 
 
 
-
-
-        }
+    }
 }
