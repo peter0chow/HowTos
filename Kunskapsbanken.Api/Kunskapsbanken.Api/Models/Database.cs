@@ -8,19 +8,38 @@ namespace Kunskapsbanken.Api.Models
 {
     public class Database
     {
-        private string connectionString = "user id=PeterChau;" +
-                           "password=Tomat123;server=localhost\\SQLEXPRESS;" +
-                           "Trusted_Connection=yes;" +
-                           "database=Kunskapsbanken;" +
-                           "connection timeout=30";
+        // connectionString för Azures databas
+        //private string connectionString()
+        //{
+        //    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+        //    builder.DataSource = "peter0chau.database.windows.net";
+        //    builder.UserID = "PeterChau";
+        //    builder.Password = "Tomat123";
+        //    builder.InitialCatalog = "sql-kunskapsbanken";
+        //    return builder.ConnectionString;
+        //}
+
+
+        // connectionString för local databas
+        private string connectionString()
+        {
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "localhost\\SQLEXPRESS";
+            builder.UserID = "PeterChau";
+            builder.Password = "Tomat123";
+            builder.InitialCatalog = "Kunskapsbanken";
+            return builder.ConnectionString;
+        }
+
+
 
         public string GetFullName(string user)
         {
-            string queryString = "SELECT CONCAT(FirstName, ' ', LastName) AS [FullName] FROM Users WHERE UserId LIKE '" + user+"'";
+            string queryString = "SELECT CONCAT(FirstName, ' ', LastName) AS [FullName] FROM Users WHERE UserId LIKE '" + user + "'";
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connectionString()))
                 {
                     SqlCommand command = new SqlCommand(queryString, connection);
                     connection.Open();
@@ -28,17 +47,17 @@ namespace Kunskapsbanken.Api.Models
 
                     reader.Read();
                     string fullName = "";
-                    fullName = reader.GetString(reader.GetOrdinal("FullName"));                    
+                    fullName = reader.GetString(reader.GetOrdinal("FullName"));
                     connection.Close();
                     return fullName;
                 }
             }
 
-            catch 
+            catch
             {
                 return user;
             }
-            
+
         }
 
 
@@ -48,7 +67,7 @@ namespace Kunskapsbanken.Api.Models
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connectionString()))
                 {
                     SqlCommand command = new SqlCommand(queryString, connection);
                     connection.Open();
@@ -73,12 +92,11 @@ namespace Kunskapsbanken.Api.Models
 
         public List<HowTo> SqlGetAllHowTos()
         {
-            //string queryString = "SELECT X.[HowToId], X.[Created], X.[Title], X.[Description], CONCAT(U.FirstName, ' ', U.LastName) AS [CreatedBy], X.[Name] AS [Department] FROM (SELECT * FROM AllHowTos A LEFT JOIN Departments B ON A.Department = B.DepartmentId) AS X LEFT JOIN Users AS U ON X.CreatedBy = U.UserId";
             string queryString = "SELECT * FROM AllHowTos";
 
             List<HowTo> howToList = new List<HowTo>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString()))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
                 connection.Open();
@@ -115,7 +133,7 @@ namespace Kunskapsbanken.Api.Models
         {
             string queryString = "INSERT INTO [dbo].[AllHowTos] ([Title], [Description], [CreatedBy], [Department]) VALUES (@title, @description, @createdBy, @department);";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString()))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
                 connection.Open();
@@ -136,12 +154,12 @@ namespace Kunskapsbanken.Api.Models
 
 
 
-        
+
         public void SqlUpdateHowTo(HowTo howTo)
         {
             string queryString = "UPDATE AllHowTos SET Title=@title, Description=@description, CreatedBy=@createdBy, Department=@department WHERE HowToId=" + howTo.Id;
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString()))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
                 connection.Open();
@@ -151,7 +169,7 @@ namespace Kunskapsbanken.Api.Models
                 SqlParameter descriptionParam = new SqlParameter("@description", howTo.Description);
                 SqlParameter createdByParam = new SqlParameter("@createdBy", howTo.CreatedBy);
                 SqlParameter departmentParam = new SqlParameter("@department", howTo.Department);
-                
+
                 command.Parameters.AddRange(new SqlParameter[] { titleParam, descriptionParam, createdByParam, departmentParam });
                 command.ExecuteNonQuery();
 
@@ -168,7 +186,7 @@ namespace Kunskapsbanken.Api.Models
 
             string queryString = "DELETE FROM dbo.AllHowTos WHERE HowToId=@id;";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString()))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
                 connection.Open();
@@ -201,7 +219,7 @@ namespace Kunskapsbanken.Api.Models
 
             List<HowTo> howToList = new List<HowTo>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString()))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
                 connection.Open();
@@ -220,11 +238,13 @@ namespace Kunskapsbanken.Api.Models
                     howToList.Add(howTo);
                 }
                 connection.Close();
-                                
+
                 return howToList;
             }
 
         }
+
+
 
 
 
